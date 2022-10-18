@@ -1,6 +1,13 @@
 
 class CykService
 
+    # Builder or constructor as java language that
+    # let us instantiate an instance of this CykService
+    # in other files of the application
+    # Input:
+    # +grammar+:: Base on readme template or type it could be modeled as a json object
+    #             with specific properties such as producer and products.
+    # +word+:: The string or sequence of terminal that we want to llok for in the grammar
     def initialize(grammar, word)
         @grammar = grammar
         @word = word
@@ -34,40 +41,54 @@ class CykService
             end
         end
         puts(grid) # Debugging Result
-        return (grid[0][n-1].join.include? 'S')
+        return [(grid[0][n-1].join.include? 'S'), grid]
     end
 
+    # Gets the producer of an specific product or terminal
+    # +product+:: String != '' that we are lookin for
+    # Output: An array of the producers of the product in parameter
+    # Considerations it returns an empty set or array if it does not
+    # find any match in grammar
     private def getProducers(product)
         return @grammar.select{|element| 
             element[:products].include?(product)}.map{|element| 
                 element[:producer]}
     end
 
+    # Private function that concatenates two sets of productions
+    # Just making a n^2 combination of the array as arguments of the
+    # method
+    # Input:
+    # +prefix+:: Array of elements or producers of the X_i,k postion
+    # +sufix+:: Array of elements or producers of the X_(i+k),(j-k) postion
+    # Output: We are returning a string of elements separated by spaces
+    # due to include method look for specific values in array so that is why
+    # is better return a string
     private def concatenate(prefix, sufix)
-        pre = prefix.dup
-        su = sufix.dup
+        pre = prefix.dup # All in ruby is an object so we are passing the references
+        su = sufix.dup # and we do not want to modify its values so that is why we copy
         arr = ''
-        comma = ''
+        space = ''
         if (pre and su)
             pre.each_index{|productionP| 
                 su.each_index{|productionS| 
                     begin
                         # Concatenation with a string
-                        arr += comma + pre[productionP] + su[productionS]
+                        arr += space + pre[productionP] + su[productionS]
                     rescue
                         begin
                             # Concatenation with an array
-                            arr += comma + pre[productionP][0] + su[productionS][0]
+                            arr += space + pre[productionP][0] + su[productionS][0]
                         rescue
                             # Concatenation with a nil value (empty set)
-                            arr += comma
+                            arr += space
                         end
                     end
-                    comma = ' '
-                }}
+                    space = ' '
+            }}
             return arr
         end
-        return comma
+        return space
     end
 
 end
