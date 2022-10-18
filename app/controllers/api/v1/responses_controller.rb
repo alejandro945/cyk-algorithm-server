@@ -1,5 +1,8 @@
+require "#{Rails.root}/app/services/cyk_algorithm.rb"
+
 class Api::V1::ResponsesController < ApplicationController
-    
+    before_action :parse_request, only: [:create]
+
     #GET /responses
     def index 
         @responses = Response.all
@@ -8,7 +11,9 @@ class Api::V1::ResponsesController < ApplicationController
 
     #POST /responses
     def create
-        @response = Response.new()
+        service = CykService.new(params[:grammar], params[:word])
+        res = service.algorithm
+        @response = Response.new(word: params[:word],isAdmitted: res)
         if @response.save
             render json: @response
         else
@@ -16,11 +21,14 @@ class Api::V1::ResponsesController < ApplicationController
         end
     end
 
+    private
+
+    def parse_request
+        @json = JSON.parse(request.body.read)
+    end
+
     # grammar [
     #    {producer: String, products: String[]}
     #   ]
-    def response_params
-        params.require(:response).permit(:grammar,:word)
-    end
 
 end

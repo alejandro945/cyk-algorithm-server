@@ -49,7 +49,41 @@ $ rails test
 **Boolean Output: w ∈ L(G) only if S ∈ X1n.**:
 
 ```console
-$ curl -X POST -H 'Content-type: application/json' -d '{"GIC": "", "w": "aabcc"}' localhost:3000/responses
+$ curl -X POST -H 'Content-type: application/json' -d '{}' localhost:3000/responses
+```
+#### Json Input
+```json
+{
+    "grammar": [
+        {
+        "producer": "S",
+        "products": ["BA", "A"]
+        },
+        {
+        "producer": "A",
+        "products": ["CA","a"]
+        },
+        {
+        "producer": "B",
+        "products": ["BB","b"]
+        },
+        {
+        "producer": "C",
+        "products": ["BA", "c"]
+        }
+    ],
+    "word": "bca"
+}
+```
+#### Json Output
+```json
+{
+    "id": 12,
+    "word": "bca",
+    "isAdmitted": true,
+    "created_at": "2022-10-18T02:14:45.389Z",
+    "updated_at": "2022-10-18T02:14:45.389Z"
+}
 ```
 
 **Get responses in sqlite database**:
@@ -57,5 +91,44 @@ $ curl -X POST -H 'Content-type: application/json' -d '{"GIC": "", "w": "aabcc"}
 ```console
 $ curl localhost:3000/responses
 ```
-
+#### Json Output
+```json
+[
+    {
+        "id": 8,
+        "word": "bbab",
+        "isAdmitted": true,
+        "created_at": "2022-10-18T01:50:28.200Z",
+        "updated_at": "2022-10-18T01:50:28.200Z"
+    },
+    {
+        "id": 9,
+        "word": "bbab",
+        "isAdmitted": true,
+        "created_at": "2022-10-18T01:53:37.901Z",
+        "updated_at": "2022-10-18T01:53:37.901Z"
+    },
+    {
+        "id": 10,
+        "word": "aab",
+        "isAdmitted": true,
+        "created_at": "2022-10-18T01:54:40.336Z",
+        "updated_at": "2022-10-18T01:54:40.336Z"
+    },
+    {
+        "id": 11,
+        "word": "aab",
+        "isAdmitted": true,
+        "created_at": "2022-10-18T01:55:11.980Z",
+        "updated_at": "2022-10-18T01:55:11.980Z"
+    },
+    {
+        "id": 12,
+        "word": "bca",
+        "isAdmitted": true,
+        "created_at": "2022-10-18T02:14:45.389Z",
+        "updated_at": "2022-10-18T02:14:45.389Z"
+    }
+]
+```
 
